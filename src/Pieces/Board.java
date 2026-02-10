@@ -1,27 +1,63 @@
 package Pieces;
 
+//The board class stores the chessboard and the pieces on it
 public class Board {
+    //The board is a 2D array of pieces
     private Piece[][] chessboard;
+    //this.pieces stores all pieces on the board
     private Piece[] pieces;
 
+    //Initialize the board with a given size
+    public Board( int rows, int cols ){
+        //Initialize the board with null values
+        this.chessboard = new Piece[rows][cols];
+        this.pieces = new Piece[0];
+    }
+
+    //Generates a copy of the board with all its values
+    //The Pieces are copied by reference and the board is copied by value
+    //So when a piece is changed in the board, it is also changed in the copy
+    //But when a piece is removed from the board, it is not removed from the copy
     public Board copy(){
+        //Generate a new board with the same size and manually copy all the values
         Board board_copy = new Board( this.chessboard.length, this.chessboard[0].length );
         for ( int row_idx = 0; row_idx < this.chessboard.length; row_idx++ ){
             for ( int col_idx = 0; col_idx < this.chessboard[0].length; col_idx++ ){
                 board_copy.chessboard[row_idx][col_idx] = this.chessboard[row_idx][col_idx];
             }
         }
-        board_copy.pieces = this.pieces;;
-        return board_copy;
-    }
 
-    public Board( int rows, int cols ){
-        this.chessboard = new Piece[rows][cols];
-        this.pieces = new Piece[0];
+        //Copy the pieces but generate a clone of the pieces and not the actual pieces
+        board_copy.pieces = new Piece[this.pieces.length];
+        System.arraycopy( this.pieces, 0, board_copy.pieces, 0, this.pieces.length );
+        return board_copy;
     }
 
     public Piece[][] getBoard(){
         return this.chessboard;
+    }
+
+    //Removing a piece from the board
+    public boolean removePiece( int row, int col ){
+        //Check if the position is valid
+        Piece piece = this.chessboard[row][col];
+        if ( piece == null ){ return false; }
+
+        //Remove the piece from the board
+        this.chessboard[row][col] = null;
+
+        //Remove the piece from the pieces array
+        Piece[] pieces_new = new Piece[this.pieces.length - 1];
+        int idx = 0;
+        for (Piece value : this.pieces) {
+            if ( !value.getType().equals( piece.getType() ) ) {
+                pieces_new[idx] = value;
+                idx++;
+            }
+        }
+        this.pieces = pieces_new;
+        return true;
+
     }
 
     public String setPiece( Piece piece ){
@@ -102,6 +138,7 @@ public class Board {
     public int get_max_row(){
         return this.chessboard.length;
     }
+
     public int get_max_col(){
         return this.chessboard[0].length;
     }

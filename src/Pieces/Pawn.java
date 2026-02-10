@@ -5,6 +5,7 @@ public class Pawn extends Piece{
 
     public Pawn( String name, String playerName, String imgPath, Position pos, int direction ){
         //Direction can be one for upwards and -1 for downwards
+        //So 1 when moving from 0 to 8 and -1 when moving from 8 to 1
         super( name, playerName, imgPath, pos );
 
         if ( direction != 1 && direction != -1 ){ throw new IllegalArgumentException("Direction must be 1 or -1"); }
@@ -13,44 +14,60 @@ public class Pawn extends Piece{
 
     @Override
     public Position[] valid_moves( Board b ) {
+        //Checks if a position is empty
+        //Also checks if the piece is from the same player
+        //If a piece is not from the same player add it to the valid moves
+
+
         Position currentPos = this.get_pos();
 
-        int x = currentPos.get_row();
-        int y = currentPos.get_col();
+        //Get the current position
+        int row = currentPos.get_row();
+        int col = currentPos.get_col();
 
-        //Check going to the right bottom
-        int leftEdge = x - 1;
-        int rightEdge = x + 1;
+        int new_row = row + direction;
+        
+        //Get left and right edge of the pawn
+        int left_col = col - 1;
+        int right_col = col + 1;
 
         Position[] valid_moves = new Position[0];
-        if ( y + direction < b.get_max_row() && y + direction >= 0 ){
+        if ( new_row < b.get_max_row() && new_row >= 0 ){
             //Check if there is a piece in front of the pawn
-            if ( b.getPiece(x,y + direction) == null ){
-                valid_moves = this.check_position( b, x, y + direction, valid_moves );
+            //A pawn can only move forward when there is no piece so it can not replace a enemy piece directly
+            if ( b.getPiece( new_row, col ) == null ){
+                valid_moves = this.check_position( b, new_row, col, valid_moves );
             }
 
-            //Check if there is a piece in front of the pawn that is on the other team
-            //This is the left side
-            if ( leftEdge >= 0 ){
-                if ( b.getPiece(leftEdge,y + direction) !=  null && !b.getPiece(leftEdge,y + direction).getPlayerName().equals(this.playerName) ){
-                    valid_moves = this.check_position( b, leftEdge, y + direction, valid_moves );
+
+            //Check if there is a piece on the left side in front of the pawn
+
+            //Check if the left side is outside the board
+            if ( left_col >= 0 ){
+                //Check if there is a piece on the left side
+                if ( b.getPiece(new_row, left_col) != null ){
+
+                    //If there is a piece on the left side check if it is a valid move
+                    valid_moves = this.check_position( b, new_row, left_col, valid_moves );
                 }
             }
 
-            //This is the right side
-            if ( rightEdge < b.get_max_col( )){
-                if ( b.getPiece(rightEdge,y + direction) !=  null && !b.getPiece(rightEdge,y + direction).getPlayerName().equals(this.playerName) ){
-                    valid_moves = this.check_position( b, rightEdge, y + direction, valid_moves );
+            //Check if there is a piece on the right side in front of the pawn
+
+            //Check if the right side is outside the board
+            if ( right_col < b.get_max_col( )){
+                //Check if there is a piece on the right side
+                if ( b.getPiece(new_row, right_col) != null ){
+                    valid_moves = this.check_position( b, new_row, right_col, valid_moves );
                 }
             }
-
         }
 
         //When the pawn is in the start position it can move two squares forward
-        if ( x == startPos.get_row() && y == startPos.get_col() ){
-            valid_moves = this.check_position( b, x, y + direction * 2, valid_moves );
+        //Check if the pawn is still in the start position
+        if ( row == startPos.get_row() && col == startPos.get_col() ){
+            valid_moves = this.check_position( b, row + direction * 2, col, valid_moves );
         }
-
         return valid_moves;
     }
 

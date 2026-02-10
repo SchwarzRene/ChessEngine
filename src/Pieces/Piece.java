@@ -35,25 +35,25 @@ public abstract class Piece {
         return this.name;
     }
 
-    public Position[] check_position( Board b, int x, int y, Position[] valid_moves ){
-        if ( x < 0 || x >= b.get_max_row() || y < 0 || y >= b.get_max_col() ){ return valid_moves; }
+    public Position[] check_position( Board b, int row, int col, Position[] valid_moves ){
+        //Check if the position is valid
 
-        if ( b.getPiece(x,y) != null ){
-            if ( b.getPiece(x,y).getPlayerName().equals( this.playerName) ){ return valid_moves; }
+        //Check if the position is inside the board
+        if ( row < 0 || row >= b.get_max_row() || col < 0 || col >= b.get_max_col() ){ return valid_moves; }
+
+        //Check if the position is empty
+        if ( b.getPiece(row,col) != null ){
+            //If it is not empty check if it is on the same team
+            if ( b.getPiece(row,col).getPlayerName().equals( this.playerName) ){ return valid_moves; }
         }
 
-        Position p = new Position( x, y );
+        //If empty or enemy piece add it to the valid moves
+        Position p = new Position( row, col );
         Position[] new_valid_moves = new Position[valid_moves.length+1];
         new_valid_moves[valid_moves.length] = p;
         System.arraycopy( valid_moves, 0, new_valid_moves, 0, valid_moves.length );
         valid_moves = new_valid_moves;
 
-        //Check if the piece is on the other team
-        if ( b.getPiece(x,y) != null ) {
-            if (!b.getPiece(x, y).getPlayerName().equals(this.playerName)) {
-                return valid_moves;
-            }
-        }
         return valid_moves;
     }
 

@@ -8,6 +8,10 @@ import java.util.Scanner;
 public class HumanPlayer {
     private String playerName;
 
+    public String getPlayerName(){
+        return this.playerName;
+    }
+
     public HumanPlayer( String playerName ){
         this.playerName = playerName;
     }
@@ -66,5 +70,30 @@ public class HumanPlayer {
         Position to = new Position( toRow, toCol );
 
         return new Move( from, to, this.playerName );
+    }
+
+    public String pawn_promotion( Position pawn_position ){
+        //Inform the player that he can promote a pawn to a different piece
+        //Inform the player which piece he wants to promote to
+        //Return the piece's name'
+
+        System.out.println( "Pawn at " + pawn_position.toString() + " can be promoted to which piece?" );
+        System.out.println( "Queen, Rook, Knight, Bishop or Nothing?" );
+
+        while ( true ){
+            System.out.println( "Enter the piece's name: [Q,R,K,B,N]" );
+
+            Scanner scanner = new Scanner(System.in);
+            String piece = scanner.next();
+            piece = piece.toUpperCase();
+            switch (piece) {
+                case "Q" -> { return "queen"; }
+                case "R" -> { return "rook"; }
+                case "K" -> { return "knight"; }
+                case "B" -> { return "bishop"; }
+                case "N" -> { return "nothing"; }
+            }
+            System.out.println( "Invalid piece name." );
+        }
     }
 }
