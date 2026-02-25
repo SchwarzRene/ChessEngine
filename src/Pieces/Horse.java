@@ -37,9 +37,4 @@ public class Horse extends Piece{
         }
         return valid_moves;
     }
-
-    @Override
-    public String getPlayerName(){
-        return this.playerName;
-    }
 }

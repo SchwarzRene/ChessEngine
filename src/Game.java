@@ -4,6 +4,9 @@ public class Game {
     private Board chessboard;
     private HumanPlayer whitePlayer;
 
+    private King kb1;
+    private King kw1;
+
     public Game(){
         classical_chess();
     }
@@ -31,8 +34,8 @@ public class Game {
         Queen qw1 = new Queen( "Queen_1_white", "White", "qw", new Position( 0, 4 ) );
         this.chessboard.setPiece(qw1);
 
-        King kw1 = new King( "King_1_white", "White", "kw", new Position( 0, 3 ) );
-        this.chessboard.setPiece(kw1);
+        this.kw1 = new King( "King_1_white", "White", "kw", new Position( 0, 3 ) );
+        this.chessboard.setPiece(this.kw1);
 
         for ( int i = 0; i < 8; i++ ){
             String name = "Pawn_" + i + "_white";
@@ -65,8 +68,8 @@ public class Game {
         Queen qb1 = new Queen( "Queen_1_black", "Black", "qb", new Position( 7, 4 ) );
         this.chessboard.setPiece(qb1);
 
-        King kb1 = new King( "King_1_black", "Black", "kb", new Position( 7, 3 ) );
-        this.chessboard.setPiece(kb1);
+        this.kb1 = new King( "King_1_black", "Black", "kb", new Position( 7, 3 ) );
+        this.chessboard.setPiece(this.kb1);
 
         for ( int i = 0; i < 8; i++ ){
             String name = "Pawn_" + i + "_black";
@@ -100,8 +103,8 @@ public class Game {
                 }
 
                 System.out.println( "Pawn promotion allowed: " + pawn_promotion_possible );
-                System.out.println( "The king is in check: " + check_king_in_check( kb1, this.chessboard ) );
-                System.out.println( "Checkmate: " + check_checkmate( kb1 ) );
+                System.out.println( "The king is in check: " + check_king_in_check( this.kb1, this.chessboard ) );
+                System.out.println( "Checkmate: " + check_checkmate( this.kb1 ) );
             }
         }
     }

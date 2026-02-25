@@ -26,9 +26,4 @@ public class Queen extends Piece{
 
         return valid_moves;
     }
-
-    @Override
-    public String getPlayerName(){
-        return this.playerName;
-    }
 }

@@ -1,9 +1,12 @@
 package Pieces;
 
 public class Move {
-    //Storing the move of a player
-    //The move consists of a from and a to position
-    //Also a move contains the playerName
+    /*
+    Storing the move of a player
+    The move consists of a from and a to position
+    Also a move contains the playerName
+    */
+
     Position from;
     public Position to;
     String playerName;

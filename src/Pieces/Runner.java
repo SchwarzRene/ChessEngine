@@ -76,9 +76,4 @@ public class Runner extends Piece{
         }
         return valid_moves;
     }
-
-    @Override
-    public String getPlayerName(){
-        return this.playerName;
-    }
 }

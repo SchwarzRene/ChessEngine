@@ -1,5 +1,6 @@
 package Pieces;
 
+//Class of the Pawn piece
 public class Pawn extends Piece{
     final int direction;
 
@@ -68,11 +69,34 @@ public class Pawn extends Piece{
         if ( row == startPos.get_row() && col == startPos.get_col() ){
             valid_moves = this.check_position( b, row + direction * 2, col, valid_moves );
         }
+
+        //Check for en passant
+
+        //Check if the place left next to a pawn is empty
+        valid_moves = check_en_passant(b, row, left_col, valid_moves);
+        valid_moves = check_en_passant(b, row, right_col, valid_moves);
+
+
         return valid_moves;
     }
 
-    @Override
-    public String getPlayerName(){
-        return this.playerName;
+    private Position[] check_en_passant(Board b, int row, int column, Position[] valid_moves) {
+        Piece side_piece = b.getPiece( row, column );
+        if ( side_piece != null ){
+            //Check if the piece is from the enemy
+            if ( !side_piece.getPlayerName().equals( this.getPlayerName() ) ){
+                //Check if the piece is a pawn
+                if ( side_piece.getType().toLowerCase().contains( "pawn" ) ){
+
+                    //Check if the last moved piece was that pawn
+                    if ( b.getLastMovedPiece().getType().toLowerCase().contains( "pawn" ) ){
+                        if ( b.getLastMovedPiece().get_pos().get_row() == row && b.getLastMovedPiece().get_pos().get_col() == column ){
+                            valid_moves = this.check_position( b, row + direction, column, valid_moves );
+                        }
+                    }
+                }
+            }
+        }
+        return valid_moves;
     }
 }

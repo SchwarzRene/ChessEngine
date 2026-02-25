@@ -1,5 +1,21 @@
 package Pieces;
 
+/*
+Main class for all pieces
+ Piece
+ --> Piece( String name, String playerName, String imgPath, Position pos )
+
+ --> Position get_pos() [Return the current position of the piece]
+ --> void set_pos( Position pos ) [Set the new position of the piece]
+
+ --> String getType() [Return the type of the piece]
+ --> String getImgPath() [Return the path to the image of the piece]
+ --> String getPlayerName() [Return the name of the player]
+
+ --> boolean hasMoved() [Return true if the piece has moved]
+
+ --> Position[] valid_moves( Board b ) [Return an array of all valid positions for the piece]
+ */
 public abstract class Piece {
     private Position pos;
     final String imgPath;
@@ -7,6 +23,8 @@ public abstract class Piece {
     final String playerName;
     public Position startPos;
     public Position lastPos;
+
+    private boolean hasMoved = false;
 
     public Piece(String name, String playerName, String imgPath, Position pos) {
         this.pos = pos;
@@ -25,6 +43,11 @@ public abstract class Piece {
     public void set_pos(Position pos) {
         this.lastPos = this.pos;
         this.pos = pos;
+        hasMoved = true;
+    }
+
+    public boolean hasMoved(){
+        return this.hasMoved;
     }
 
     public String getImgPath(){
@@ -36,14 +59,20 @@ public abstract class Piece {
     }
 
     public Position[] check_position( Board b, int row, int col, Position[] valid_moves ){
-        //Check if the position is valid
+        /*
+        Check if the position is valid, so if a piece does not replace pieces from its own player
+        Therefore check if a position is inside the board
+        Then check if the piece at the position (row|col) is empty or on the same team
+        If it is empty or on the same team add it to the valid moves array
+         */
 
+        Position position = new Position( row, col );
         //Check if the position is inside the board
-        if ( row < 0 || row >= b.get_max_row() || col < 0 || col >= b.get_max_col() ){ return valid_moves; }
+        if ( b.valid_position( position ) ){ return valid_moves; }
 
         //Check if the position is empty
-        if ( b.getPiece(row,col) != null ){
-            //If it is not empty check if it is on the same team
+        //If it is not empty check if it is on the same team
+        if ( b.empty_position( position ) ){
             if ( b.getPiece(row,col).getPlayerName().equals( this.playerName) ){ return valid_moves; }
         }
 
@@ -57,6 +86,9 @@ public abstract class Piece {
         return valid_moves;
     }
 
-    public abstract String getPlayerName();
+    public String getPlayerName(){
+        return this.playerName;
+    }
+
     public abstract Position[] valid_moves(Board b);
 }
